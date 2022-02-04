@@ -2,4 +2,3 @@ git remote origin add (repository 주소)
 git 주소 추가
 
 
-ada
