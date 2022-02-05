@@ -1,4 +1,35 @@
-git remote origin add (repository 주소)
+git remote add origin https://github.com/taeksin/trade_bot.git
 git 주소 추가
 
 
+
+
+
+
+
+
+
+------------------------------------------------------
+vs코드
+GitHub에서 repository 생성
+
+해당 repository의 URL복사
+
+vscode에서 Source Control 아이콘 클릭
+
+Initialize Repository 버튼 클릭(로컬 repository 초기화)
+
+CHANGES의 '+'버튼 클릭(모든 파일 추가)
+
+Commit(체크모양) 아이콘 클릭
+
+Commit 내용 입력 후 엔터(로컬 repository에 커밋)
+
+Terminal에서 "git remote add origin + 
+'2번에서 복사한 url'" 입력 (원격 repository 주소를 지정)
+ex) git remote add origin https://github.com/abc/abc.git
+
+"git pull origin main --allow-unrelated-histories" 입력
+(Github 내용을 로컬 repository에 반영)
+
+"git push -u origin master" 입력

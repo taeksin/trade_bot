@@ -75,7 +75,7 @@ def start_monitoring():
                             msg_key = {'TYPE': 'PCNT-UP', 'ITEM': account['market']}
 
                             # 메세지 조립
-                            message = '\n\n[보유종목 상승안내!]'
+                            message = '\n\n[▲▲보유종목 상승안내!▲▲]'
                             message = message + '\n\n- 대상종목: ' + str(account['market'])
                             message = message + '\n- 현재가: ' + str(ticker['trade_price'])
                             message = message + '\n- 변동률:  ' + str(chg_rate) + "%"
@@ -92,7 +92,7 @@ def start_monitoring():
                             msg_key = {'TYPE': 'PCNT-DOWN', 'ITEM': account['market']}
 
                             # 메세지 조립
-                            message = '\n\n[보유종목 하락안내!]'
+                            message = '\n\n[▽▽보유종목 하락안내!▽▽]'
                             message = message + '\n\n- 대상종목: ' + str(account['market'])
                             message = message + '\n- 현재가: ' + str(ticker['trade_price'])
                             message = message + '\n- 변동률:  ' + str(chg_rate) + "%"
