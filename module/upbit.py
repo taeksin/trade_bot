@@ -36,6 +36,8 @@ min_order_amt = 5000
 #     3. 그외(기본) : INFO          ③ ERROR : 에러 로그를 보고 싶은 경우
 # - Output
 # -----------------------------------------------------------------------------
+
+
 def set_loglevel(level):
     try:
 
@@ -99,7 +101,8 @@ def send_request(reqType, reqUrl, reqParam, reqHeader):
         while True:
 
             # 요청 처리
-            response = requests.request(reqType, reqUrl, params=reqParam, headers=reqHeader)
+            response = requests.request(
+                reqType, reqUrl, params=reqParam, headers=reqHeader)
 
             # 요청 가능회수 추출
             if 'Remaining-Req' in response.headers:
@@ -107,7 +110,8 @@ def send_request(reqType, reqUrl, reqParam, reqHeader):
                 hearder_info = response.headers['Remaining-Req']
                 start_idx = hearder_info.find("sec=")
                 end_idx = len(hearder_info)
-                remain_sec = hearder_info[int(start_idx):int(end_idx)].replace('sec=', '')
+                remain_sec = hearder_info[int(start_idx):int(
+                    end_idx)].replace('sec=', '')
             else:
                 logging.error("헤더 정보 이상")
                 logging.error(response.headers)
@@ -530,7 +534,8 @@ def get_candle(target_item, tick_kind, inq_range):
         # Tick 조회
         # ----------------------------------------
         querystring = {"market": target_item, "count": inq_range}
-        res = send_request("GET", server_url + "/v1/candles/" + target_url, querystring, "")
+        res = send_request("GET", server_url +
+                           "/v1/candles/" + target_url, querystring, "")
         candle_data = res.json()
 
         logging.debug(candle_data)
@@ -572,9 +577,11 @@ def get_targetprice(cal_type, st_price, chg_val):
                 hoga_val = get_hoga(rtn_price)
 
                 if Decimal(str(chg_val)) > 0:
-                    rtn_price = Decimal(str(rtn_price)) + Decimal(str(hoga_val))
+                    rtn_price = Decimal(str(rtn_price)) + \
+                        Decimal(str(hoga_val))
                 elif Decimal(str(chg_val)) < 0:
-                    rtn_price = Decimal(str(rtn_price)) - Decimal(str(hoga_val))
+                    rtn_price = Decimal(str(rtn_price)) - \
+                        Decimal(str(hoga_val))
                 else:
                     break
 
@@ -587,9 +594,11 @@ def get_targetprice(cal_type, st_price, chg_val):
                 hoga_val = get_hoga(st_price)
 
                 if Decimal(str(chg_val)) > 0:
-                    rtn_price = Decimal(str(rtn_price)) + Decimal(str(hoga_val))
+                    rtn_price = Decimal(str(rtn_price)) + \
+                        Decimal(str(hoga_val))
                 elif Decimal(str(chg_val)) < 0:
-                    rtn_price = Decimal(str(rtn_price)) - Decimal(str(hoga_val))
+                    rtn_price = Decimal(str(rtn_price)) - \
+                        Decimal(str(hoga_val))
                 else:
                     break
 
@@ -690,10 +699,12 @@ def get_krwbal():
         # 잔고가 있는 경우만
         if Decimal(str(krw_balance)) > Decimal(str(0)):
             # 수수료
-            fee = math.ceil(Decimal(str(krw_balance)) * (Decimal(str(fee_rate)) / Decimal(str(100))))
+            fee = math.ceil(Decimal(str(krw_balance)) *
+                            (Decimal(str(fee_rate)) / Decimal(str(100))))
 
             # 매수가능금액
-            available_krw = math.floor(Decimal(str(krw_balance)) - Decimal(str(fee)))
+            available_krw = math.floor(
+                Decimal(str(krw_balance)) - Decimal(str(fee)))
 
         else:
             # 수수료
@@ -763,7 +774,7 @@ def get_accounts(except_yn, market_code):
                     if except_yn == "Y" or except_yn == "y":
                         if account_data_for['currency'] != "KRW" and Decimal(str(account_data_for['avg_buy_price'])) * (
                                 Decimal(str(account_data_for['balance'])) + Decimal(
-                            str(account_data_for['locked']))) >= Decimal(str(min_price)):
+                                    str(account_data_for['locked']))) >= Decimal(str(min_price)):
                             rtn_data.append(
                                 {'market': market_code + '-' + account_data_for['currency'],
                                  'balance': account_data_for['balance'],
@@ -1018,7 +1029,6 @@ def get_rsi(target_item, tick_kind, inq_range):
 
         return rsi
 
-
     # ----------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
     # ----------------------------------------
@@ -1059,8 +1069,10 @@ def get_mfi(target_item, tick_kind, inq_range, loop_cnt):
             df = pd.DataFrame(candle_data_for)
             dfDt = df['candle_date_time_kst'].iloc[::-1]
 
-            df['typical_price'] = (df['trade_price'] + df['high_price'] + df['low_price']) / 3
-            df['money_flow'] = df['typical_price'] * df['candle_acc_trade_volume']
+            df['typical_price'] = (df['trade_price'] +
+                                   df['high_price'] + df['low_price']) / 3
+            df['money_flow'] = df['typical_price'] * \
+                df['candle_acc_trade_volume']
 
             positive_mf = 0
             negative_mf = 0
@@ -1077,7 +1089,8 @@ def get_mfi(target_item, tick_kind, inq_range, loop_cnt):
             else:
                 mfi = 100 - (100 / (1 + (positive_mf)))
 
-            mfi_list.append({"type": "MFI", "DT": dfDt[0], "MFI": round(mfi, 4)})
+            mfi_list.append(
+                {"type": "MFI", "DT": dfDt[0], "MFI": round(mfi, 4)})
 
         return mfi_list
 
@@ -1186,7 +1199,6 @@ def get_bb(target_item, tick_kind, inq_range, loop_cnt):
 
         return bb_list
 
-
     # ----------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
     # ----------------------------------------
@@ -1210,6 +1222,8 @@ def get_bb(target_item, tick_kind, inq_range, loop_cnt):
     ④ CP : 종가
     ⑤ W : 윌리암스 %R 값 '''
 # -----------------------------------------------------------------------------
+
+
 def get_williamsR(target_item, tick_kind, inq_range, loop_cnt):
     try:
 
@@ -1245,7 +1259,6 @@ def get_williamsR(target_item, tick_kind, inq_range, loop_cnt):
                  "W": round(w, 4)})
 
         return williams_list
-
 
     # ----------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
@@ -1329,8 +1342,10 @@ def get_mfi(candle_datas):
             df = pd.DataFrame(candle_data_for)
             dfDt = df['candle_date_time_kst'].iloc[::-1]
 
-            df['typical_price'] = (df['trade_price'] + df['high_price'] + df['low_price']) / 3
-            df['money_flow'] = df['typical_price'] * df['candle_acc_trade_volume']
+            df['typical_price'] = (df['trade_price'] +
+                                   df['high_price'] + df['low_price']) / 3
+            df['money_flow'] = df['typical_price'] * \
+                df['candle_acc_trade_volume']
 
             positive_mf = 0
             negative_mf = 0
@@ -1347,7 +1362,8 @@ def get_mfi(candle_datas):
             else:
                 mfi = 100 - (100 / (1 + (positive_mf)))
 
-            mfi_list.append({"type": "MFI", "DT": dfDt[0], "MFI": round(mfi, 4)})
+            mfi_list.append(
+                {"type": "MFI", "DT": dfDt[0], "MFI": round(mfi, 4)})
 
         return mfi_list
 
@@ -1437,7 +1453,6 @@ def get_bb(candle_datas):
 
         return bb_list
 
-
     # ----------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
     # ----------------------------------------
@@ -1478,7 +1493,6 @@ def get_williams(candle_datas):
                  "W": round(w, 4)})
 
         return williams_list
-
 
     # ----------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
@@ -1618,7 +1632,8 @@ def get_order_status(target_item, status):
 def orderby_dict(target_dict, target_column, order_by):
     try:
 
-        rtn_dict = sorted(target_dict, key=(lambda x: x[target_column]), reverse=order_by)
+        rtn_dict = sorted(target_dict, key=(
+            lambda x: x[target_column]), reverse=order_by)
 
         return rtn_dict
 
@@ -1686,7 +1701,8 @@ def get_order_chance(target_item):
         authorize_token = 'Bearer {}'.format(jwt_token)
         headers = {"Authorization": authorize_token}
 
-        res = send_request("GET", server_url + "/v1/orders/chance", query, headers)
+        res = send_request("GET", server_url +
+                           "/v1/orders/chance", query, headers)
         rtn_data = res.json()
 
         return rtn_data
@@ -1705,6 +1721,8 @@ def get_order_chance(target_item):
 # - Output
 #   1) MA 값
 # -----------------------------------------------------------------------------
+
+
 def get_ma(candle_datas, loop_cnt):
     try:
         # MA 데이터 리턴용
@@ -1725,11 +1743,7 @@ def get_ma(candle_datas, loop_cnt):
         for i in range(0, int(loop_cnt)):
             ma_list.append(
                 {"type": "MA", "DT": candle_datas[0][i]['candle_date_time_kst'], "MA5": ma5[i], "MA10": ma10[i],
-                 "MA20": ma20[i], "MA60": ma60[i], "MA120": ma120[i]
-                    , "MA_5_10": str(Decimal(str(ma5[i])) - Decimal(str(ma10[i])))
-                    , "MA_10_20": str(Decimal(str(ma10[i])) - Decimal(str(ma20[i])))
-                    , "MA_20_60": str(Decimal(str(ma20[i])) - Decimal(str(ma60[i])))
-                    , "MA_60_120": str(Decimal(str(ma60[i])) - Decimal(str(ma120[i])))})
+                 "MA20": ma20[i], "MA60": ma60[i], "MA120": ma120[i], "MA_5_10": str(Decimal(str(ma5[i])) - Decimal(str(ma10[i]))), "MA_10_20": str(Decimal(str(ma10[i])) - Decimal(str(ma20[i]))), "MA_20_60": str(Decimal(str(ma20[i])) - Decimal(str(ma60[i]))), "MA_60_120": str(Decimal(str(ma60[i])) - Decimal(str(ma120[i])))})
 
         return ma_list
 
@@ -1757,13 +1771,17 @@ def get_cci(candle_data, loop_cnt):
 
         # 오름차순 정렬
         df = pd.DataFrame(candle_data)
-        ordered_df = df.sort_values(by=['candle_date_time_kst'], ascending=[True])
+        ordered_df = df.sort_values(
+            by=['candle_date_time_kst'], ascending=[True])
 
         # 계산식 : (Typical Price - Simple Moving Average) / (0.015 * Mean absolute Deviation)
-        ordered_df['TP'] = (ordered_df['high_price'] + ordered_df['low_price'] + ordered_df['trade_price']) / 3
+        ordered_df['TP'] = (ordered_df['high_price'] +
+                            ordered_df['low_price'] + ordered_df['trade_price']) / 3
         ordered_df['SMA'] = ordered_df['TP'].rolling(window=20).mean()
-        ordered_df['MAD'] = ordered_df['TP'].rolling(window=20).apply(lambda x: pd.Series(x).mad())
-        ordered_df['CCI'] = (ordered_df['TP'] - ordered_df['SMA']) / (0.015 * ordered_df['MAD'])
+        ordered_df['MAD'] = ordered_df['TP'].rolling(
+            window=20).apply(lambda x: pd.Series(x).mad())
+        ordered_df['CCI'] = (ordered_df['TP'] -
+                             ordered_df['SMA']) / (0.015 * ordered_df['MAD'])
 
         # 개수만큼 조립
         for i in range(0, loop_cnt):
@@ -1824,6 +1842,8 @@ def get_max(candle_data, col_name_high, col_name_low):
 # - Output
 #   1) 보조지표
 # -----------------------------------------------------------------------------
+
+
 def get_indicator_sel(target_item, tick_kind, inq_range, loop_cnt, indi_type):
     try:
 
@@ -1896,6 +1916,8 @@ def get_indicator_sel(target_item, tick_kind, inq_range, loop_cnt, indi_type):
 # - Output
 #   1) response : 발송결과(200:정상)
 # -----------------------------------------------------------------------------
+
+
 def send_line_message(message):
     try:
         headers = {'Authorization': 'Bearer ' + line_token}
@@ -1924,6 +1946,8 @@ def send_line_message(message):
 # - Output
 #   1) sent_list : 메세지 발송 내역
 # -----------------------------------------------------------------------------
+
+
 def send_msg(sent_list, key, contents, msg_intval):
     try:
 
@@ -1940,7 +1964,8 @@ def send_msg(sent_list, key, contents, msg_intval):
             for sent_list_for in sent_list:
                 if key in sent_list_for.values():
                     sent_yn = True
-                    sent_dt = datetime.strptime(sent_list_for['SENT_DT'], '%Y-%m-%d %H:%M:%S')
+                    sent_dt = datetime.strptime(
+                        sent_list_for['SENT_DT'], '%Y-%m-%d %H:%M:%S')
 
             # 기 발송 건
             if sent_yn:
@@ -1948,7 +1973,8 @@ def send_msg(sent_list, key, contents, msg_intval):
                 logging.info('기존 발송 건')
 
                 # 현재 시간 추출
-                current_dt = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
+                current_dt = datetime.strptime(datetime.now().strftime(
+                    '%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
 
                 # 시간 차이 추출
                 diff = current_dt - sent_dt
@@ -1967,7 +1993,8 @@ def send_msg(sent_list, key, contents, msg_intval):
                             sent_list.remove(sent_list_for)
 
                     # 새로운 발송이력 추가
-                    sent_list.append({'KEY': key, 'SENT_DT': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+                    sent_list.append(
+                        {'KEY': key, 'SENT_DT': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
 
                 else:
                     logging.info('발송 주기 미 도래 건!')
@@ -1980,7 +2007,8 @@ def send_msg(sent_list, key, contents, msg_intval):
                 send_line_message(contents)
 
                 # 새로운 발송이력 추가
-                sent_list.append({'KEY': key, 'SENT_DT': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+                sent_list.append(
+                    {'KEY': key, 'SENT_DT': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
 
         return sent_list
 
@@ -2025,17 +2053,15 @@ def read_file(name):
 # - Name : get_change_rate
 # - Desc : 변동률 조회
 # - Input
-# 1. 
+# 1.
 # - Output
 # 1. change_rate
 # -----------------------------------------------------------------------------
 def get_change_rate(target_item):
     candle_data = get_candle(target_item, 'D', '1')
     df = pd.DataFrame(candle_data)
-    change_rate=float(df['change_rate']*100)
-    trade_price=str(target_item['trade_price'])
-    b=[change_rate,trade_price]
-    return b
+    change_rate = float(df['change_rate']*100)
+    return change_rate
 
 
 '''
@@ -2047,5 +2073,3 @@ def get_change_rate(target_item):
     b=[change_rate,trade_price]
     return b
 '''
- 
-

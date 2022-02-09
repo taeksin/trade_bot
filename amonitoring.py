@@ -20,7 +20,8 @@ def start_monitoring():
         # 프로그램 시작 메세지 발송
         message = '\n\n[프로그램 시작 안내]'
         message = message + '\n\n잔고 모니터링 프로그램이 시작 되었습니다!'
-        message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+        message = message + '\n\n- 현재시간:' + \
+            str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
 
         # 프로그램 시작 메세지 발송
         upbit.send_line_message(message)
@@ -34,47 +35,56 @@ def start_monitoring():
         # 반복 조회
         while True:
 
-            
-#ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+            # ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             # 전일대비
 
             target_items = upbit.get_items('KRW', '')
             for target_item in target_items:
-                a=upbit.get_change_rate(target_item['market'])
+                a = upbit.get_change_rate(target_item['market'])
                 float(a)
                 # 개별 종목 10% 이상 상승 시 메세지 발송(1시간 간격)
                 if a >= 10:
-                    logging.info("PCNT-UP 조건 만족![" + str(target_item['market']) + "]")
+                    logging.info(
+                        "PCNT-UP 조건 만족![" + str(target_item['market']) + "]")
                     logging.info("변동률: [" + str(a) + "% ]")
-                    
+
                     # 알림 Key 조립
-                    msg_key = {'TYPE': 'PCNT-UP', 'ITEM': target_item['market']}
+                    msg_key = {'TYPE': 'PCNT-UP',
+                               'ITEM': target_item['market']}
 
                     # 메세지 조립
                     message = '\n\n[▲▲실시간 상승안내!▲▲]'
-                    message = message + '\n\n- 대상종목: ' + str(target_item['market'])
+                    message = message + '\n\n- 대상종목: ' + \
+                        str(target_item['market'])
                     #message = message + '\n- 현재가: ' + str(target_item['trade_price'])
-                    message = message + '\n- 변동률:  ' + str('%.2f'%float(a)) + "%"
+                    message = message + '\n- 변동률:  ' + \
+                        str('%.2f' % float(a)) + "%"
 
                     # 메세지 발송(1시간:3600초 간격)
-                    sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
+                    sent_list = upbit.send_msg(
+                        sent_list, msg_key, message, '3600')
 
                 # 개별 종목 10% 이상 하락 시 메세지 발송(1시간 간격)
                 if a <= -10:
-                    logging.info("PCNT-DOWN 조건 만족![" + str(target_item['market']) + "]")
+                    logging.info(
+                        "PCNT-DOWN 조건 만족![" + str(target_item['market']) + "]")
                     logging.info("변동률: [" + str(a) + "% ]")
-                    
+
                     # 알림 Key 조립
-                    msg_key = {'TYPE': 'PCNT-UP', 'ITEM': target_item['market']}
+                    msg_key = {'TYPE': 'PCNT-UP',
+                               'ITEM': target_item['market']}
 
                     # 메세지 조립
                     message = '\n\n[▲▲실시간 상승안내!▲▲]'
-                    message = message + '\n\n- 대상종목: ' + str(target_item['market'])
+                    message = message + '\n\n- 대상종목: ' + \
+                        str(target_item['market'])
                     #message = message + '\n- 현재가: ' + str(target_item['trade_price'])
-                    message = message + '\n- 변동률:  ' + str('%.2f'%float(a)) + "%"
+                    message = message + '\n- 변동률:  ' + \
+                        str('%.2f' % float(a)) + "%"
 
                     # 메세지 발송(1시간:3600초 간격)
-                    sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
+                    sent_list = upbit.send_msg(
+                        sent_list, msg_key, message, '3600')
     # ----------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
     # ----------------------------------------
