@@ -1,3 +1,4 @@
+import re
 import time
 import logging
 import requests
@@ -2019,4 +2020,21 @@ def read_file(name):
     except Exception:
         raise
 
+
+# -----------------------------------------------------------------------------
+# - Name : get_change_rate
+# - Desc : 변동률 조회
+# - Input
+# 1. 
+# - Output
+# 1. change_rate
+# -----------------------------------------------------------------------------
+def get_change_rate(target_item):
+    candle_data = get_candle(target_item, 'D', '1')
+    df = pd.DataFrame(candle_data)
+    change_rate=float(df['change_rate']*100)
+    trade_price=str(target_item['trade_price'])
+    b=[change_rate,trade_price]
+    return b
+ 
 
