@@ -2036,5 +2036,16 @@ def get_change_rate(target_item):
     trade_price=str(target_item['trade_price'])
     b=[change_rate,trade_price]
     return b
+
+
+'''
+def get_change_rate(target_item):
+    candle_data = get_candle(target_item, 'D', '1')
+    df = pd.DataFrame(candle_data)
+    change_rate=float(df['change_rate']*100)
+    trade_price=str(target_item['trade_price'])
+    b=[change_rate,trade_price]
+    return b
+'''
  
 

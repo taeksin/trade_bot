@@ -1,0 +1,5 @@
+amonitoring 
+#message = message + '\n- 현재가: ' + str(target_item['trade_price'])
+변동률은 보내지는데
+현재가가 안보내지는구만
+
