@@ -1362,8 +1362,7 @@ def get_mfi(candle_datas):
             else:
                 mfi = 100 - (100 / (1 + (positive_mf)))
 
-            mfi_list.append(
-                {"type": "MFI", "DT": dfDt[0], "MFI": round(mfi, 4)})
+            mfi_list.append( {"type": "MFI", "DT": dfDt[0], "MFI": round(mfi, 4)})
 
         return mfi_list
 
@@ -1404,9 +1403,7 @@ def get_macd(candle_datas, loop_cnt):
 
         for i in range(0, int(loop_cnt)):
             macd_list.append(
-                {"type": "MACD", "DT": candle_datas[0][i]['candle_date_time_kst'], "MACD": round(macd[i], 4),
-                 "SIGNAL": round(exp3[i], 4),
-                 "OCL": round(macd[i] - exp3[i], 4)})
+                {"type": "MACD", "DT": candle_datas[0][i]['candle_date_time_kst'], "MACD": round(macd[i], 4), "SIGNAL": round(exp3[i], 4),"OCL": round(macd[i] - exp3[i], 4)})
 
         return macd_list
 
@@ -1448,8 +1445,7 @@ def get_bb(candle_datas):
             band_high = bb_center + band1
             band_low = bb_center - band1
 
-            bb_list.append({"type": "BB", "DT": dfDt[0], "BBH": round(band_high, 4), "BBM": round(bb_center, 4),
-                            "BBL": round(band_low, 4)})
+            bb_list.append({"type": "BB", "DT": dfDt[0], "BBH": round(band_high, 4), "BBM": round(bb_center, 4),"BBL": round(band_low, 4)})
 
         return bb_list
 
@@ -1488,9 +1484,7 @@ def get_williams(candle_datas):
 
             w = (hh - cp) / (hh - ll) * -100
 
-            williams_list.append(
-                {"type": "WILLIAMS", "DT": dfDt[0], "HH": round(hh, 4), "LL": round(ll, 4), "CP": round(cp, 4),
-                 "W": round(w, 4)})
+            williams_list.append({"type": "WILLIAMS", "DT": dfDt[0], "HH": round(hh, 4), "LL": round(ll, 4), "CP": round(cp, 4),"W": round(w, 4)})
 
         return williams_list
 
@@ -1701,8 +1695,7 @@ def get_order_chance(target_item):
         authorize_token = 'Bearer {}'.format(jwt_token)
         headers = {"Authorization": authorize_token}
 
-        res = send_request("GET", server_url +
-                           "/v1/orders/chance", query, headers)
+        res = send_request("GET", server_url +"/v1/orders/chance", query, headers)
         rtn_data = res.json()
 
         return rtn_data
@@ -1741,9 +1734,8 @@ def get_ma(candle_datas, loop_cnt):
         ma120 = df.rolling(window=120).mean()
 
         for i in range(0, int(loop_cnt)):
-            ma_list.append(
-                {"type": "MA", "DT": candle_datas[0][i]['candle_date_time_kst'], "MA5": ma5[i], "MA10": ma10[i],
-                 "MA20": ma20[i], "MA60": ma60[i], "MA120": ma120[i], "MA_5_10": str(Decimal(str(ma5[i])) - Decimal(str(ma10[i]))), "MA_10_20": str(Decimal(str(ma10[i])) - Decimal(str(ma20[i]))), "MA_20_60": str(Decimal(str(ma20[i])) - Decimal(str(ma60[i]))), "MA_60_120": str(Decimal(str(ma60[i])) - Decimal(str(ma120[i])))})
+            ma_list.append({"type": "MA", "DT": candle_datas[0][i]['candle_date_time_kst'], "MA5": ma5[i], "MA10": ma10[i],
+                            "MA20": ma20[i], "MA60": ma60[i], "MA120": ma120[i], "MA_5_10": str(Decimal(str(ma5[i])) - Decimal(str(ma10[i]))), "MA_10_20": str(Decimal(str(ma10[i])) - Decimal(str(ma20[i]))), "MA_20_60": str(Decimal(str(ma20[i])) - Decimal(str(ma60[i]))), "MA_60_120": str(Decimal(str(ma60[i])) - Decimal(str(ma120[i])))})
 
         return ma_list
 
@@ -1771,22 +1763,17 @@ def get_cci(candle_data, loop_cnt):
 
         # 오름차순 정렬
         df = pd.DataFrame(candle_data)
-        ordered_df = df.sort_values(
-            by=['candle_date_time_kst'], ascending=[True])
+        ordered_df = df.sort_values(by=['candle_date_time_kst'], ascending=[True])
 
         # 계산식 : (Typical Price - Simple Moving Average) / (0.015 * Mean absolute Deviation)
-        ordered_df['TP'] = (ordered_df['high_price'] +
-                            ordered_df['low_price'] + ordered_df['trade_price']) / 3
+        ordered_df['TP'] = (ordered_df['high_price'] +ordered_df['low_price'] + ordered_df['trade_price']) / 3
         ordered_df['SMA'] = ordered_df['TP'].rolling(window=20).mean()
-        ordered_df['MAD'] = ordered_df['TP'].rolling(
-            window=20).apply(lambda x: pd.Series(x).mad())
-        ordered_df['CCI'] = (ordered_df['TP'] -
-                             ordered_df['SMA']) / (0.015 * ordered_df['MAD'])
+        ordered_df['MAD'] = ordered_df['TP'].rolling(window=20).apply(lambda x: pd.Series(x).mad())
+        ordered_df['CCI'] = (ordered_df['TP'] -ordered_df['SMA']) / (0.015 * ordered_df['MAD'])
 
         # 개수만큼 조립
         for i in range(0, loop_cnt):
-            cci_list.append({"type": "CCI", "DT": ordered_df['candle_date_time_kst'].loc[i],
-                             "CCI": round(ordered_df['CCI'].loc[i], 4)})
+            cci_list.append({"type": "CCI", "DT": ordered_df['candle_date_time_kst'].loc[i],"CCI": round(ordered_df['CCI'].loc[i], 4)})
 
         return cci_list
 
@@ -1964,8 +1951,7 @@ def send_msg(sent_list, key, contents, msg_intval):
             for sent_list_for in sent_list:
                 if key in sent_list_for.values():
                     sent_yn = True
-                    sent_dt = datetime.strptime(
-                        sent_list_for['SENT_DT'], '%Y-%m-%d %H:%M:%S')
+                    sent_dt = datetime.strptime(sent_list_for['SENT_DT'], '%Y-%m-%d %H:%M:%S')
 
             # 기 발송 건
             if sent_yn:
@@ -1973,8 +1959,7 @@ def send_msg(sent_list, key, contents, msg_intval):
                 logging.info('기존 발송 건')
 
                 # 현재 시간 추출
-                current_dt = datetime.strptime(datetime.now().strftime(
-                    '%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
+                current_dt = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
 
                 # 시간 차이 추출
                 diff = current_dt - sent_dt
@@ -1993,8 +1978,7 @@ def send_msg(sent_list, key, contents, msg_intval):
                             sent_list.remove(sent_list_for)
 
                     # 새로운 발송이력 추가
-                    sent_list.append(
-                        {'KEY': key, 'SENT_DT': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+                    sent_list.append({'KEY': key, 'SENT_DT': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
 
                 else:
                     logging.info('발송 주기 미 도래 건!')
@@ -2007,8 +1991,7 @@ def send_msg(sent_list, key, contents, msg_intval):
                 send_line_message(contents)
 
                 # 새로운 발송이력 추가
-                sent_list.append(
-                    {'KEY': key, 'SENT_DT': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+                sent_list.append({'KEY': key, 'SENT_DT': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
 
         return sent_list
 

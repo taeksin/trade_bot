@@ -3,7 +3,7 @@ import os
 import sys
 import logging
 import traceback
-
+from datetime import datetime
 from decimal import Decimal
 
 # 공통 모듈 Import
@@ -19,6 +19,19 @@ from module import upbit
 # -----------------------------------------------------------------------------
 def start_buytrade(buy_amt):
     try:
+        # 프로그램 시작 메세지 발송
+        message = '\n\n[프로그램 시작 안내]'
+        message = message + '\n\n buy_bot 프로그램이 시작 되었습니다!'
+        message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+
+        # 프로그램 시작 메세지 발송
+        upbit.send_line_message(message)
+
+        # ---------------------------------------------------------------------
+        # 알림 발송 용 변수
+        # ---------------------------------------------------------------------
+        sent_list = []
+        # ---------------------------------------------------------------------
 
         # ----------------------------------------------------------------------
         # 반복 수행
@@ -168,6 +181,17 @@ def start_buytrade(buy_amt):
                     rtn_buycoin_mp = upbit.buycoin_mp(target_item['market'], buy_amt)
                     logging.info('시장가 매수 종료! [' + str(target_item['market']) + ']')
                     logging.info(rtn_buycoin_mp)
+                    #★ 매수완료 메시지 보내기
+                    # 알림 Key 조립
+                    msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
+
+                    # 메세지 조립
+                    message = '\n\n[▲▲실시간 상승안내!▲▲]'
+                    message = message + '\n\n- 대상종목: ' + str(target_item['market'])
+                    message = message + '\n- 현재가: ' + str(target_item['trade_price'])
+
+                    # 메세지 발송(1시간:3600초 간격)
+                    sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
 
     # ---------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
@@ -200,10 +224,9 @@ if __name__ == '__main__':
         # ---------------------------------------------------------------------
 
         # 1. 로그레벨
-        #log_level = input("로그레벨(D:DEBUG, E:ERROR, 그 외:INFO) : ").upper()
-        #buy_amt = input("매수금액(M:최대, 10000:1만원) : ").upper()
         log_level = "INFO"
         buy_amt = 10000
+
         upbit.set_loglevel(log_level)
 
         logging.info("*********************************************************")
