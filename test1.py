@@ -187,7 +187,7 @@ def start_buytrade(buy_amt):
 
                     # 메세지 조립
                     message = '\n\n[▲▲실시간 상승안내!▲▲]'
-                    message = message + '\n\n- 대상종목: ' + str(target_item['market'])
+                    message = message + '\n\n- 종목: ' + str(target_item['market'])
                     message = message + '\n- 현재가: ' + str(target_item['trade_price'])
 
                     # 메세지 발송(1시간:3600초 간격)
