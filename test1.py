@@ -21,7 +21,7 @@ def start_buytrade(buy_amt):
     try:
         # 프로그램 시작 메세지 발송
         message = '\n\n[프로그램 시작 안내]'
-        message = message + '\n\n buy_bot 프로그램이 시작 되었습니다!'
+        message = message + '\n\n buy_bot이 시작 되었습니다!'
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
 
         # 프로그램 시작 메세지 발송

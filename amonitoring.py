@@ -19,7 +19,7 @@ def start_monitoring():
 
         # 프로그램 시작 메세지 발송
         message = '\n\n[프로그램 시작 안내]'
-        message = message + '\n\n잔고 모니터링 프로그램이 시작 되었습니다!'
+        message = message + '\n\n잔고 모니터링이 시작 되었습니다!'
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
 
         # 프로그램 시작 메세지 발송
