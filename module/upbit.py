@@ -2143,7 +2143,8 @@ def get_change_rate(target_item):
     candle_data = get_candle(target_item, 'D', '1')
     df = pd.DataFrame(candle_data)
     change_rate = float(df['change_rate']*100)
-    return change_rate
+    trade_price=float(df['trade_price'])
+    return (change_rate,trade_price)
 
 
 '''

@@ -43,12 +43,12 @@ def start_monitoring():
             target_items = upbit.get_items('KRW', '')
             for target_item in target_items:
                 time.sleep(0.3)
-                a = upbit.get_change_rate(target_item['market'])
-                float(a)
+                change_rate,trade_price = upbit.get_change_rate(target_item['market'])
+                float(change_rate)
                 # 개별 종목 10% 이상 상승 시 메세지 발송(1시간 간격)
-                if a >= 10:
+                if change_rate >= 10:
                     logging.info("PCNT-UP 조건 만족![" + str(target_item['market']) + "]")
-                    logging.info("변동률: [" + str(a) + "% ]")
+                    logging.info("변동률: [" + str(change_rate) + "% ]")
 
                     # 알림 Key 조립
                     msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
@@ -56,25 +56,25 @@ def start_monitoring():
                     # 메세지 조립
                     message = '\n\n[🔺🔺실시간 상승안내!🔺🔺]'
                     message = message + '\n\n- 대상종목: ' +str(target_item['market'])
-                    #message = message + '\n- 현재가: ' + str(target_item['trade_price'])
-                    message = message + '\n- 변동률:  ' + str('%.2f' % float(a)) + "%"
+                    message = message + '\n- 현재가: ' + str(trade_price)
+                    message = message + '\n- 변동률:  ' + str('%.2f' % float(change_rate)) + "%"
 
                     # 메세지 발송(1시간:3600초 간격)
                     sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
 
                 # 개별 종목 10% 이상 하락 시 메세지 발송(1시간 간격)
-                if a <= -10:
+                if change_rate <= -10:
                     logging.info("PCNT-DOWN 조건 만족![" + str(target_item['market']) + "]")
-                    logging.info("변동률: [" + str(a) + "% ]")
+                    logging.info("변동률: [" + str(change_rate) + "% ]")
 
                     # 알림 Key 조립
                     msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
                     # 메세지 조립
                     message = '\n\n[💙💙실시간 하락안내!💙💙]'
-                    message = message + '\n\n- 종목: ' + str(target_item['market'])
-                    #message = message + '\n- 현재가: ' + str(target_item['trade_price'])
-                    message = message + '\n- 변동률:  ' + str('%.2f' % float(a)) + "%"
+                    message = message + '\n\n-    종목: ' + str(target_item['market'])
+                    message = message + '\n- 현재가: ' + str(trade_price)
+                    message = message + '\n- 변동률:  ' + str('%.2f' % float(change_rate)) + "%"
 
                     # 메세지 발송(1시간:3600초 간격)
                     sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
