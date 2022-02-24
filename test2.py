@@ -26,7 +26,7 @@ from module import upbit
 def start_selltrade(sell_pcnt, dcnt_pcnt):
     try:
         # 프로그램 시작 메세지 발송
-        message = '\n\n[프로그램 시작 안내]'
+        message = '\n\n[🟦🔵프로그램 시작 안내🔵🟦]'
         message = message + '\n\n sell_bot 시작 되었습니다!'
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
 
@@ -152,7 +152,7 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                             msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
                             # 메세지 조립
-                            message = '\n\n[■★■매도 추천 안내!■★■]'
+                            message = '\n\n[🟦🔵매도 추천 안내!🔵🟦]'
                             message = message + '\n\n- 종목: ' +str(target_item['market'])
                             message = message + '\n- 현재가: ' + str(target_item['trade_price'])
                             message = message + '\n- 현재 수익률: ' +Decimal(str(rev_pcnt))

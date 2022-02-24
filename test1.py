@@ -20,7 +20,7 @@ from module import upbit
 def start_buytrade(buy_amt):
     try:
         # 프로그램 시작 메세지 발송
-        message = '\n\n[프로그램 시작 안내]'
+        message = '\n\n[🔴🟥프로그램 시작 안내🟥🔴]'
         message = message + '\n\n buy_bot이 시작 되었습니다!'
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
 
@@ -178,7 +178,7 @@ def start_buytrade(buy_amt):
                     # ------------------------------------------------------------------
                     logging.info('시장가 매수 시작! [' + str(target_item['market']) + ']')
                     rtn_buycoin_mp = upbit.buycoin_mp(target_item['market'], buy_amt)
-                    upbit.send_telegram_message(target_item['market']+"구매 완료")
+                    upbit.send_telegram_message("🔴🟥"+target_item['market']+"구매 완료🟥🔴")
                     logging.info('시장가 매수 종료! [' + str(target_item['market']) + ']')
                     logging.info(rtn_buycoin_mp)
                     
@@ -186,7 +186,7 @@ def start_buytrade(buy_amt):
                     msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
                     # 메세지 조립
-                    message = '\n\n[▲▲구매완료 안내!▲▲]'
+                    message = '\n\n[🔴🟥구매완료 안내!🟥🔴]'
                     message = message + '\n\n- 종목: ' + str(target_item['market'])
                     message = message + '\n- 현재가: ' + str(target_item['trade_price'])
                     

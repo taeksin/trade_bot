@@ -54,7 +54,7 @@ def start_monitoring():
                     msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
                     # 메세지 조립
-                    message = '\n\n[▲▲실시간 상승안내!▲▲]'
+                    message = '\n\n[🔺🔺실시간 상승안내!🔺🔺]'
                     message = message + '\n\n- 대상종목: ' +str(target_item['market'])
                     #message = message + '\n- 현재가: ' + str(target_item['trade_price'])
                     message = message + '\n- 변동률:  ' + str('%.2f' % float(a)) + "%"
@@ -71,7 +71,7 @@ def start_monitoring():
                     msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
                     # 메세지 조립
-                    message = '\n\n[▼▼실시간 하락안내!▼▼]'
+                    message = '\n\n[💙💙실시간 하락안내!💙💙]'
                     message = message + '\n\n- 종목: ' + str(target_item['market'])
                     #message = message + '\n- 현재가: ' + str(target_item['trade_price'])
                     message = message + '\n- 변동률:  ' + str('%.2f' % float(a)) + "%"
