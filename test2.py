@@ -21,6 +21,8 @@ from module import upbit
 # 1) sell_pcnt : 매도 수익률
 # 2) dcnt_pcnt : 고점대비 하락률
 # -----------------------------------------------------------------------------
+
+
 def start_selltrade(sell_pcnt, dcnt_pcnt):
     try:
         # 프로그램 시작 메세지 발송
@@ -29,19 +31,19 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
 
         # 프로그램 시작 메세지 발송
-        upbit.send_line_message(message)
+        upbit.send_telegram_message(message)
 
         # ---------------------------------------------------------------------
         # 알림 발송 용 변수
         # ---------------------------------------------------------------------
         sent_list = []
         # ---------------------------------------------------------------------
-        
+
         # ----------------------------------------------------------------------
         # 반복 수행
         # ----------------------------------------------------------------------
         while True:
-
+            time.sleep(0.4)
             # ------------------------------------------------------------------
             # 보유 종목조회
             # ------------------------------------------------------------------
@@ -75,10 +77,10 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                         # 매수 직후 나타나는 오류 체크용 마지막 매수 시간 차이 계산
                         # -------------------------------------------------
                         # 마지막 매수 시간
-                        last_buy_dt = datetime.strptime(dateutil.parser.parse(order_done_filtered[0]['created_at']).strftime('%Y-%m-%d %H:%M:%S'),'%Y-%m-%d %H:%M:%S')
+                        last_buy_dt = datetime.strptime(dateutil.parser.parse(order_done_filtered[0]['created_at']).strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
 
                         # 현재 시간 추출
-                        current_dt = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'),'%Y-%m-%d %H:%M:%S')
+                        current_dt = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
 
                         # 시간 차이 추출
                         diff = current_dt - last_buy_dt
@@ -145,17 +147,17 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                             logging.info('시장가 매도 종료! [' + str(target_item['market']) + ']')
                             # logging.info(rtn_sellcoin_mp)
                             logging.info('------------------------------------------------------')
-                            #★ 매도 추천 메시지 보내기
+                            # ★ 매도 추천 메시지 보내기
                             # 알림 Key 조립
                             msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
                             # 메세지 조립
-                            message = '\n\n[■■매도 추천 안내!■■]'
-                            message = message + '\n\n- 종목: ' + str(target_item['market'])
+                            message = '\n\n[■★■매도 추천 안내!■★■]'
+                            message = message + '\n\n- 종목: ' +str(target_item['market'])
                             message = message + '\n- 현재가: ' + str(target_item['trade_price'])
-                            message = message + '\n- 현재 수익률: ' + Decimal(str(rev_pcnt))
+                            message = message + '\n- 현재 수익률: ' +Decimal(str(rev_pcnt))
                             message = message + '\n- 고점 대비 하락률: ' + str(cur_dcnt_pcnt)
-                            
+
                             # 메세지 발송(1시간:3600초 간격)
                             sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
 
@@ -199,8 +201,8 @@ if __name__ == '__main__':
         dcnt_pcnt = input("고점대비 하락률(ex:-1%=-1) : ")
         '''
         log_level = "INFO"
-        sell_pcnt = 50
-        dcnt_pcnt = -50
+        sell_pcnt = 30
+        dcnt_pcnt = -10
         upbit.set_loglevel(log_level)
 
         logging.info("*********************************************************")

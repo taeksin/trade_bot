@@ -9,12 +9,14 @@ import math
 import os
 import pandas as pd
 import numpy
+import telegram
 
 from urllib.parse import urlencode
 from decimal import Decimal
 from datetime import datetime
 
 # Keys
+
 access_key = "Bfk7t6ioB45n6O50eggknUCH2AW2tPsetDEJq1m2"          # 본인 값으로 변경
 secret_key = "LfgWGijNRaILli9bLhUEe14EKoRra8OyvDxaWQpr"          # 본인 값으로 변경
 server_url = 'https://api.upbit.com'
@@ -22,6 +24,9 @@ ws_url = 'wss://api.upbit.com/websocket/v1'
 # Line Keys
 line_target_url = 'https://notify-api.line.me/api/notify'
 line_token = 'F2mwv6xwA5JHBRHcPMc9zNhu61kWWA5TnQBCisEkoan'
+# Telegram Keys
+telegram_token = '5155222124:AAHoLRFxM5TNxnTzO8vcwe2TIstDvf6Gqa4'
+telegram_id = '1701149318'
 
 # 상수 설정
 min_order_amt = 5000
@@ -1164,7 +1169,7 @@ def get_macd(target_item, tick_kind, inq_range, loop_cnt):
 # - Output
 #   1) 볼린저 밴드 값
 # -----------------------------------------------------------------------------
-def get_bb(target_item, tick_kind, inq_range, loop_cnt):
+def get_bb1(target_item, tick_kind, inq_range, loop_cnt):
     try:
 
         # 캔들 데이터 조회용
@@ -1904,7 +1909,6 @@ def get_indicator_sel(target_item, tick_kind, inq_range, loop_cnt, indi_type):
 #   1) response : 발송결과(200:정상)
 # -----------------------------------------------------------------------------
 
-
 def send_line_message(message):
     try:
         headers = {'Authorization': 'Bearer ' + line_token}
@@ -1935,7 +1939,7 @@ def send_line_message(message):
 # -----------------------------------------------------------------------------
 
 
-def send_msg(sent_list, key, contents, msg_intval):
+def send_msg1(sent_list, key, contents, msg_intval):
     try:
 
         # msg_intval = 'N' 이면 메세지 발송하지 않음
@@ -2001,7 +2005,102 @@ def send_msg(sent_list, key, contents, msg_intval):
     except Exception:
         raise
 
+# -----------------------------------------------------------------------------
+# - Name : send_telegram_msg
+# - Desc : 텔레그램 메세지 전송
+# - Input
+#   1) message : 메세지
+# -----------------------------------------------------------------------------
+def send_telegram_message(message):
+    try:
+        # 텔레그램 메세지 발송
+        bot = telegram.Bot(telegram_token)
+        res = bot.sendMessage(chat_id=telegram_id, text=message)
+ 
+        return res
+ 
+    # ----------------------------------------
+    # 모든 함수의 공통 부분(Exception 처리)
+    # ----------------------------------------
+    except Exception:
+        raise
+# -----------------------------------------------------------------------------
+# - Name : send_msg
+# - Desc : 메세지 전송
+# - Input
+#   1) sent_list : 메세지 발송 내역
+#   2) key : 메세지 키
+#   3) contents : 메세지 내용
+#   4) msg_intval : 메세지 발송주기
+# - Output
+#   1) sent_list : 메세지 발송 내역
+# -----------------------------------------------------------------------------
 
+def send_msg(sent_list, key, contents, msg_intval):
+    try:
+
+        # msg_intval = 'N' 이면 메세지 발송하지 않음
+        if msg_intval.upper() != 'N':
+
+            # 발송여부 체크
+            sent_yn = False
+
+            # 발송이력
+            sent_dt = ''
+
+            # 발송내역에 해당 키 존재 시 발송 이력 추출
+            for sent_list_for in sent_list:
+                if key in sent_list_for.values():
+                    sent_yn = True
+                    sent_dt = datetime.strptime(sent_list_for['SENT_DT'], '%Y-%m-%d %H:%M:%S')
+
+            # 기 발송 건
+            if sent_yn:
+
+                logging.info('기존 발송 건')
+
+                # 현재 시간 추출
+                current_dt = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
+
+                # 시간 차이 추출
+                diff = current_dt - sent_dt
+
+                # 발송 시간이 지난 경우에는 메세지 발송
+                if diff.seconds >= int(msg_intval):
+
+                    logging.info('발송 주기 도래 건으로 메시지 발송 처리!')
+
+                    # 메세지 발송
+                    send_telegram_message(contents)
+
+                    # 기존 메시지 발송이력 삭제
+                    for sent_list_for in sent_list[:]:
+                        if key in sent_list_for.values():
+                            sent_list.remove(sent_list_for)
+
+                    # 새로운 발송이력 추가
+                    sent_list.append({'KEY': key, 'SENT_DT': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+
+                else:
+                    logging.info('발송 주기 미 도래 건!')
+
+            # 최초 발송 건
+            else:
+                logging.info('최초 발송 건')
+
+                # 메세지 발송
+                send_telegram_message(contents)
+
+                # 새로운 발송이력 추가
+                sent_list.append({'KEY': key, 'SENT_DT': datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
+
+        return sent_list
+
+    # ----------------------------------------
+    # 모든 함수의 공통 부분(Exception 처리)
+    # ----------------------------------------
+    except Exception:
+        raise
 # -----------------------------------------------------------------------------
 # - Name : read_file
 # - Desc : 파일 읽기

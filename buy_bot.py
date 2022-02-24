@@ -3,7 +3,7 @@ import os
 import sys
 import logging
 import traceback
-
+from datetime import datetime
 from decimal import Decimal
 
 # 공통 모듈 Import
@@ -19,6 +19,19 @@ from module import upbit
 # -----------------------------------------------------------------------------
 def start_buytrade(buy_amt):
     try:
+        # 프로그램 시작 메세지 발송
+        message = '\n\n[프로그램 시작 안내]'
+        message = message + '\n\n buy_bot이 시작 되었습니다!'
+        message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+
+        # 프로그램 시작 메세지 발송
+        upbit.send_line_message(message)
+
+        # ---------------------------------------------------------------------
+        # 알림 발송 용 변수
+        # ---------------------------------------------------------------------
+        sent_list = []
+        # ---------------------------------------------------------------------
 
         # ----------------------------------------------------------------------
         # 반복 수행
@@ -51,8 +64,7 @@ def start_buytrade(buy_amt):
                 # 1. 조회 기준 : 일캔들, 최근 5개 지표 조회
                 # 2. 속도를 위해 원하는 지표만 조회(RSI, MFI, MACD, CANDLE)
                 # -------------------------------------------------------------
-                indicators = upbit.get_indicator_sel(target_item['market'], 'D', 200, 5,
-                                                     ['RSI', 'MFI', 'MACD', 'CANDLE'])
+                indicators = upbit.get_indicator_sel(target_item['market'], 'D', 200, 5,['RSI', 'MFI', 'MACD', 'CANDLE'])
 
                 # --------------------------------------------------------------
                 # 최근 상장하여 캔들 갯수 부족으로 보조 지표를 구하기 어려운 건은 제외
@@ -168,7 +180,18 @@ def start_buytrade(buy_amt):
                     rtn_buycoin_mp = upbit.buycoin_mp(target_item['market'], buy_amt)
                     logging.info('시장가 매수 종료! [' + str(target_item['market']) + ']')
                     logging.info(rtn_buycoin_mp)
+                    #★ 매수완료 메시지 보내기
+                    # 알림 Key 조립
+                    msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
+                    # 메세지 조립
+                    message = '\n\n[▲▲실시간 상승안내!▲▲]'
+                    message = message + '\n\n- 종목: ' + str(target_item['market'])
+                    message = message + '\n- 현재가: ' + str(target_item['trade_price'])
+                    
+                    # 메세지 발송(1시간:3600초 간격)
+                    sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
+                    
     # ---------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
     # ----------------------------------------
@@ -200,10 +223,9 @@ if __name__ == '__main__':
         # ---------------------------------------------------------------------
 
         # 1. 로그레벨
-        #log_level = input("로그레벨(D:DEBUG, E:ERROR, 그 외:INFO) : ").upper()
-        #buy_amt = input("매수금액(M:최대, 10000:1만원) : ").upper()
         log_level = "INFO"
         buy_amt = 10000
+
         upbit.set_loglevel(log_level)
 
         logging.info("*********************************************************")
@@ -215,11 +237,23 @@ if __name__ == '__main__':
         start_buytrade(buy_amt)
 
     except KeyboardInterrupt:
+        # 프로그램 종료 메세지 발송
+        message = '\n\n[Buy_bot 종료 안내]'
+        message = message + '\n\n  Key interrupt로 buy_bot이 종료됩니다!'
+        message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+        # 프로그램 종료 메세지 발송
+        upbit.send_line_message(message)
         logging.error("KeyboardInterrupt Exception 발생!")
         logging.error(traceback.format_exc())
         sys.exit(-100)
 
     except Exception:
+        # 프로그램 종료 메세지 발송
+        message = '\n\n[Buy_bot 종료 안내]'
+        message = message + '\n\n buy_bot이 실행 중 입니다!'
+        message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+        # 프로그램 종료 메세지 발송
+        upbit.send_line_message(message)
         logging.error("Exception 발생!")
         logging.error(traceback.format_exc())
         sys.exit(-200)
