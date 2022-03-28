@@ -6,8 +6,8 @@ do
 
     if [ -z $pid ]
     then
-        echo "amonitoring start"
-        sudo /trade_bot/nohup python3 amonitoring.py > output.log &
+        echo $PATH
+        ./amonitoring.py&
     fi
     sleep 5
 done

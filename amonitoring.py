@@ -54,8 +54,8 @@ def start_monitoring():
                     msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
                     # 메세지 조립
-                    message = '\n\n[🔺🔺실시간 상승안내!🔺🔺]'
-                    message = message + '\n\n- 대상종목: ' +str(target_item['market'])
+                    message = '\n\n[🔺상승!🔺]'
+                    message = message + '\n\n- 종목: ' +str(target_item['market'])
                     message = message + '\n- 현재가: ' + str(trade_price)
                     message = message + '\n- 변동률:  ' + str('%.2f' % float(change_rate)) + "%"
 
@@ -71,8 +71,8 @@ def start_monitoring():
                     msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
                     # 메세지 조립
-                    message = '\n\n[💙💙실시간 하락안내!💙💙]'
-                    message = message + '\n\n-    종목: ' + str(target_item['market'])
+                    message = '\n\n[💙하락!💙]'
+                    message = message + '\n\n- 종목: ' + str(target_item['market'])
                     message = message + '\n- 현재가: ' + str(trade_price)
                     message = message + '\n- 변동률:  ' + str('%.2f' % float(change_rate)) + "%"
 
@@ -100,11 +100,25 @@ if __name__ == '__main__':
         start_monitoring()
 
     except KeyboardInterrupt:
+        # 프로그램 종료 메세지 조립
+        message = '\n\n[🚨❌🚨종료🚨❌🚨]'
+        message = message + '\n\n 모니터링이 종료!'
+        message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+        # 프로그램 종료 메세지 발송
+        upbit.send_telegram_message(message)
+        
         logging.error("KeyboardInterrupt Exception 발생!")
         logging.error(traceback.format_exc())
         sys.exit(-100)
 
     except Exception:
+         # 프로그램 종료 메세지 조립
+        message = '\n\n[🚨❌🚨종료🚨❌🚨]'
+        message = message + '\n\n 모니터링이 종료!'
+        message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+        # 프로그램 종료 메세지 발송
+        upbit.send_telegram_message(message)
+        
         logging.error("Exception 발생!")
         logging.error(traceback.format_exc())
         sys.exit(-200)

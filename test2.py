@@ -142,6 +142,7 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                             # 실제 매도 로직은 안전을 위해 주석처리 하였습니다.
                             # 실제 매매를 원하시면 테스트를 충분히 거친 후 주석을 해제하시면 됩니다.
                             # ------------------------------------------------------------------
+                            upbit.send_telegram_message("🟦🔵"+target_item['market']+"매도 대상 발견🔵🟦")
                             logging.info('시장가 매도 시작! [' + str(target_item['market']) + ']')
                             # rtn_sellcoin_mp = upbit.sellcoin_mp(target_item['market'], 'Y')
                             logging.info('시장가 매도 종료! [' + str(target_item['market']) + ']')
@@ -152,6 +153,7 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                             msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
                             # 메세지 조립
+                            upbit.send_telegram_message("🟦🔵"+target_item['market']+"매도 대상 발견🔵🟦")
                             message = '\n\n[🟦🔵매도 추천 안내!🔵🟦]'
                             message = message + '\n\n- 종목: ' +str(target_item['market'])
                             message = message + '\n- 현재가: ' + str(target_item['trade_price'])
@@ -201,8 +203,8 @@ if __name__ == '__main__':
         dcnt_pcnt = input("고점대비 하락률(ex:-1%=-1) : ")
         '''
         log_level = "INFO"
-        sell_pcnt = 30
-        dcnt_pcnt = -10
+        sell_pcnt = 10
+        dcnt_pcnt = -5
         upbit.set_loglevel(log_level)
 
         logging.info("*********************************************************")
@@ -215,11 +217,25 @@ if __name__ == '__main__':
         start_selltrade(sell_pcnt, dcnt_pcnt)
 
     except KeyboardInterrupt:
+        # 프로그램 종료 메세지 조립
+        message = '\n\n[🚨❌🚨종료🚨❌🚨]'
+        message = message + '\n\n sell_bot 종료!'
+        message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+        # 프로그램 종료 메세지 발송
+        upbit.send_telegram_message(message)
+        
         logging.error("KeyboardInterrupt Exception 발생!")
         logging.error(traceback.format_exc())
         sys.exit(-100)
 
     except Exception:
+        # 프로그램 종료 메세지 조립
+        message = '\n\n[🚨❌🚨종료🚨❌🚨]'
+        message = message + '\n\n sell_bot 종료!'
+        message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
+        # 프로그램 종료 메세지 발송
+        upbit.send_telegram_message(message)
+        
         logging.error("Exception 발생!")
         logging.error(traceback.format_exc())
         sys.exit(-200)

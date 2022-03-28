@@ -20,8 +20,8 @@ from module import upbit
 def start_buytrade(buy_amt):
     try:
         # 프로그램 시작 메세지 발송
-        message = '\n\n[🔴🟥프로그램 시작 안내🟥🔴]'
-        message = message + '\n\n buy_bot이 시작 되었습니다!'
+        message = '\n\n[🔴🟥 시작 안내 🟥🔴]'
+        message = message + '\n\n buy_bot 시작! '
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
 
         # 프로그램 시작 메세지 발송
@@ -71,6 +71,7 @@ def start_buytrade(buy_amt):
                 # --------------------------------------------------------------
                 if 'CANDLE' not in indicators or len(indicators['CANDLE']) < 200:
                     logging.info('캔들 데이터 부족으로 데이터 산출 불가...[' + str(target_item['market']) + ']')
+                    
                     continue
 
                 # --------------------------------------------------------------
@@ -130,6 +131,7 @@ def start_buytrade(buy_amt):
                 # 매수대상 발견
                 # --------------------------------------------------------------
                 if rsi_val and mfi_val and ocl_val:
+                    upbit.send_telegram_message("🔴🟥"+target_item['market']+"매수 대상 발견🟥🔴")
                     logging.info('매수대상 발견....[' + str(target_item['market']) + ']')
                     logging.info('RSI : ' + str(rsi))
                     logging.info('MFI : ' + str(mfi))
@@ -143,7 +145,7 @@ def start_buytrade(buy_amt):
 
                     # 이미 매수한 종목이면 다시 매수하지 않음
                     # sell_bot.py에서 매도 처리되면 보유 종목에서 사라지고 다시 매수 가능
-                    if len(account) > 0:
+                    if len(account) >= 1:
                         logging.info('기 매수 종목으로 매수하지 않음....[' + str(target_item['market']) + ']')
                         continue
 
@@ -154,7 +156,7 @@ def start_buytrade(buy_amt):
                     # ------------------------------------------------------------------
                     available_amt = upbit.get_krwbal()['available_krw']
 
-                    if buy_amt == 'M':
+                    if buy_amt == '25000':
                         buy_amt = available_amt
 
                     # ------------------------------------------------------------------
@@ -239,22 +241,23 @@ if __name__ == '__main__':
 
     except KeyboardInterrupt:
         # 프로그램 종료 메세지 조립
-        message = '\n\n[Buy_bot 종료 안내]'
-        message = message + '\n\n  Key interrupt로 buy_bot이 종료됩니다!'
+        message = '\n\n[🚨❌🚨종료🚨❌🚨]'
+        message = message + '\n\n buy_bot 종료!'
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
         # 프로그램 종료 메세지 발송
-        upbit.send_line_message(message)
+        upbit.send_telegram_message(message)
+        
         logging.error("KeyboardInterrupt Exception 발생!")
         logging.error(traceback.format_exc())
         sys.exit(-100)
 
     except Exception:
         # 프로그램 종료 메세지 조립
-        message = '\n\n[Buy_bot 종료 안내]'
-        message = message + '\n\n buy_bot이 실행 중 입니다!'
+        message = '\n\n[🚨❌🚨종료🚨❌🚨]'
+        message = message + '\n\n buy_bot 종료!'
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
         # 프로그램 종료 메세지 발송
-        upbit.send_line_message(message)
+        upbit.send_telegram_message(message)
         
         logging.error("Exception 발생!")
         logging.error(traceback.format_exc())
