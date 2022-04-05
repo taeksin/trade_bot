@@ -87,8 +87,8 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
 
                         # 매수 후 1분간은 진행하지 않음(업비트 오류 방지 용)
                         if diff.seconds < 60:
-                            logging.info('- 매수 직후 발생하는 오류를 방지하기 위해 진행하지 않음!!!')
-                            logging.info('------------------------------------------------------')
+                            #logging.info('- 매수 직후 발생하는 오류를 방지하기 위해 진행하지 않음!!!')
+                            #logging.info('------------------------------------------------------')
                             continue
 
                         # -----------------------------------------------------
@@ -97,12 +97,12 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                         # -----------------------------------------------------
                         rev_pcnt = round(((Decimal(str(ticker['trade_price'])) - Decimal(str(target_item['avg_buy_price']))) / Decimal(str(target_item['avg_buy_price']))) * 100, 2)
 
-                        logging.info('')
-                        logging.info('------------------------------------------------------')
-                        logging.info('- 종목:' + str(target_item['market']))
-                        logging.info('- 평균매수가:' + str(target_item['avg_buy_price']))
-                        logging.info('- 현재가:' + str(ticker['trade_price']))
-                        logging.info('- 수익률:' + str(rev_pcnt))
+                        #logging.info('')
+                        #logging.info('------------------------------------------------------')
+                        #logging.info('- 종목:' + str(target_item['market']))
+                        #logging.info('- 평균매수가:' + str(target_item['avg_buy_price']))
+                        #logging.info('- 현재가:' + str(ticker['trade_price']))
+                        #logging.info('- 수익률:' + str(rev_pcnt))
 
                         # -----------------------------------------------------
                         # 현재 수익률이 매도 수익률 이상인 경우에만 진행
@@ -131,9 +131,9 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                         # -----------------------------------------------------
                         cur_dcnt_pcnt = round(((Decimal(str(ticker['trade_price'])) - Decimal(str(highest_high_price))) / Decimal(str(highest_high_price))) * 100, 2)
 
-                        logging.info('- 매수 후 최고가:' + str(highest_high_price))
-                        logging.info('- 고점대비 하락률:' + str(cur_dcnt_pcnt))
-                        logging.info('- 최종 매수시간:' + str(last_buy_dt))
+                        #logging.info('- 매수 후 최고가:' + str(highest_high_price))
+                        #logging.info('- 고점대비 하락률:' + str(cur_dcnt_pcnt))
+                        #logging.info('- 최종 매수시간:' + str(last_buy_dt))
 
                         if Decimal(str(cur_dcnt_pcnt)) < Decimal(str(dcnt_pcnt)):
 
@@ -143,11 +143,11 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                             # 실제 매매를 원하시면 테스트를 충분히 거친 후 주석을 해제하시면 됩니다.
                             # ------------------------------------------------------------------
                             upbit.send_telegram_message("🟦🔵"+target_item['market']+"매도 대상 발견🔵🟦")
-                            logging.info('시장가 매도 시작! [' + str(target_item['market']) + ']')
+                            #logging.info('시장가 매도 시작! [' + str(target_item['market']) + ']')
                             # rtn_sellcoin_mp = upbit.sellcoin_mp(target_item['market'], 'Y')
-                            logging.info('시장가 매도 종료! [' + str(target_item['market']) + ']')
+                            #logging.info('시장가 매도 종료! [' + str(target_item['market']) + ']')
                             # logging.info(rtn_sellcoin_mp)
-                            logging.info('------------------------------------------------------')
+                            #logging.info('------------------------------------------------------')
                             # ★ 매도 추천 메시지 보내기
                             # 알림 Key 조립
                             msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
@@ -156,16 +156,16 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                             upbit.send_telegram_message("🟦🔵"+target_item['market']+"매도 대상 발견🔵🟦")
                             message = '\n\n[🟦🔵매도 추천 안내!🔵🟦]'
                             message = message + '\n\n- 종목: ' +str(target_item['market'])
-                            message = message + '\n- 현재가: ' + str(target_item['trade_price'])
-                            message = message + '\n- 현재 수익률: ' +Decimal(str(rev_pcnt))
-                            message = message + '\n- 고점 대비 하락률: ' + str(cur_dcnt_pcnt)
+                            message = message + '\n- 현재가: ' + str(ticker['trade_price'])
+                            #message = message + '\n- 현재 수익률: ' +Decimal(str(rev_pcnt)) 
+                            #message = message + '\n- 고점 대비 하락률: ' + str(cur_dcnt_pcnt)
 
                             # 메세지 발송(1시간:3600초 간격)
                             sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
 
                         else:
                             logging.info('- 고점 대비 하락률 조건에 맞지 않아 매도하지 않음!!!')
-                            logging.info('------------------------------------------------------')
+                            #logging.info('------------------------------------------------------')
 
     # ---------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
