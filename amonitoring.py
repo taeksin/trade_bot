@@ -59,8 +59,8 @@ def start_monitoring():
                     message = message + '\n- 현재가: ' + str(trade_price)
                     message = message + '\n- 변동률:  ' + str('%.2f' % float(change_rate)) + "%"
 
-                    # 메세지 발송(1시간:3600초 간격)
-                    sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
+                    # 메세지 발송(2시간:7200초 간격)
+                    sent_list = upbit.send_msg(sent_list, msg_key, message, '7200')
 
                 # 개별 종목 10% 이상 하락 시 메세지 발송(1시간 간격)
                 if change_rate <= -10:
@@ -76,8 +76,8 @@ def start_monitoring():
                     message = message + '\n- 현재가: ' + str(trade_price)
                     message = message + '\n- 변동률:  ' + str('%.2f' % float(change_rate)) + "%"
 
-                    # 메세지 발송(1시간:3600초 간격)
-                    sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
+                    # 메세지 발송(2시간:7200초 간격)
+                    sent_list = upbit.send_msg(sent_list, msg_key, message, '7200')
     # ----------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
     # ----------------------------------------
