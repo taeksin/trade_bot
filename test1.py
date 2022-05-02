@@ -227,7 +227,7 @@ if __name__ == '__main__':
 
         # 1. 로그레벨
         log_level = "INFO"
-        buy_amt = 10000
+        buy_amt = 12345
 
         upbit.set_loglevel(log_level)
 
