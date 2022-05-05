@@ -142,10 +142,10 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                             # 실제 매도 로직은 안전을 위해 주석처리 하였습니다.
                             # 실제 매매를 원하시면 테스트를 충분히 거친 후 주석을 해제하시면 됩니다.
                             # ------------------------------------------------------------------
-                            upbit.send_telegram_message("🟦🔵"+target_item['market']+"매도 대상 발견🔵🟦")
+                            #upbit.send_telegram_message("🟦🔵"+target_item['market']+"매도 대상 발견🔵🟦")
                             #logging.info('시장가 매도 시작! [' + str(target_item['market']) + ']')
                             # rtn_sellcoin_mp = upbit.sellcoin_mp(target_item['market'], 'Y')
-                            #logging.info('시장가 매도 종료! [' + str(target_item['market']) + ']')
+                            #logging.info('시장가 매도 완료! [' + str(target_item['market']) + ']')
                             # logging.info(rtn_sellcoin_mp)
                             #logging.info('------------------------------------------------------')
                             # ★ 매도 추천 메시지 보내기
