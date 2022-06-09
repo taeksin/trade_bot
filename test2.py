@@ -28,6 +28,7 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
         # 프로그램 시작 메세지 발송
         message = '\n\n[🟦🔵프로그램 시작 안내🔵🟦]'
         message = message + '\n\n sell_bot 시작 되었습니다!'
+        message = message + '\n\n- 매도 수익률: '+str(sell_pcnt)+' // 하락률: '+str(dcnt_pcnt)
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
 
         # 프로그램 시작 메세지 발송

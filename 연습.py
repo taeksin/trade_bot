@@ -63,7 +63,7 @@ while True:
                # 01:00 < now < 01:05 
             if buy_time < now < buy_time+timedelta(minutes=5):
                 rtn_buycoin_mp = upbit.buycoin_mp("KRW-BTC", 5000)
-                upbit.send_telegram_message("📀📀BTC 구매 완료📀📀"+"\n - 현재가 "+ str(get_current_price("KRW-BTC")))
+                upbit.send_telegram_message("🔴🟥BTC 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-BTC")))
                 time.sleep(180)
                 '''
                 # 알림 Key 조립
@@ -80,7 +80,7 @@ while True:
         else :
             while int(available_amt) <5050:
                 
-                message = '\n\n 🔋🔌 ༼ つ ◕_◕ ༽つ\n 총알이 떨어졌습니다. \n 장전해주세요'
+                message = '\n\n 🔋🔌 ༼ つ ◕_◕ ༽つ 🔌🔋\n 🔋 총알이 떨어졌습니다. \n 🔋 장전해주세요'
                 message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
                 # 프로그램 종료 메세지 발송d
                 sent_list = upbit.send_msg(sent_list, 0, message, '3600')

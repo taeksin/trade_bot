@@ -65,9 +65,10 @@ def start_buytrade(buy_amt):
         while True:
             now =datetime.now()                            # 현재시간
             start_time = get_start_time("KRW-BTC")         # 시작시간      9:00
-            end_time = start_time + timedelta(days=1)      # 종료시간
+            print(start_time)
+            #end_time = start_time + timedelta(days=1)      # 종료시간
             buy_time = start_time - timedelta(hours=8)     # 구매시간      01:00
-            
+            print(buy_time+timedelta(minutes=5))
             if buy_time<now<buy_time+timedelta(minutes=5):
                 print("hi")
             
@@ -104,11 +105,10 @@ def start_buytrade(buy_amt):
                     # 시장가 매수
                     # 실제 매매를 원하시면 테스트를 충분히 거친 후 주석을 해제하시면 됩니다.
                     # ------------------------------------------------------------------
-                    logging.info('시장가 매수 시작! [' + str(target_item['market']) + ']')
+                    #logging.info('시장가 매수 시작! [' + str(target_item['market']) + ']')
                     rtn_buycoin_mp = upbit.buycoin_mp("KRW-BTC", buy_amt)
-                    upbit.send_telegram_message("💲💲"+"BTC 구매 완료💲💲")
-                    upbit.send_telegram_message('\n- 현재가: ' + str(get_current_price("KRW-BTC")))
-                    logging.info('시장가 매수 종료! [' + str(target_item['market']) + ']')
+                    upbit.send_telegram_message("💲💲BTC 구매 완료💲💲"+"\n - 현재가 "+ str(get_current_price("KRW-BTC")))
+                    #logging.info('시장가 매수 종료! [' + str(target_item['market']) + ']')
                     logging.info(rtn_buycoin_mp)
                     '''
                     # 알림 Key 조립

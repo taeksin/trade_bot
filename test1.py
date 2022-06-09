@@ -181,9 +181,10 @@ def start_buytrade(buy_amt):
                     logging.info('시장가 매수 시작! [' + str(target_item['market']) + ']')
                     rtn_buycoin_mp = upbit.buycoin_mp(target_item['market'], buy_amt)
                     upbit.send_telegram_message("🔴🟥"+target_item['market']+"구매 완료🟥🔴")
+                    upbit.send_telegram_message('\n- 현재가: ' + str(target_item['trade_price']))
                     logging.info('시장가 매수 종료! [' + str(target_item['market']) + ']')
                     logging.info(rtn_buycoin_mp)
-                    
+                    '''
                     # 알림 Key 조립
                     msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
 
@@ -194,6 +195,7 @@ def start_buytrade(buy_amt):
                     
                     # 메세지 발송(1시간:3600초 간격)
                     sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
+                    '''
                     
     # ---------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
