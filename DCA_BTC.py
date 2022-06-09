@@ -36,7 +36,7 @@ def get_current_price(ticker):
 
 
 # 자동매매 시작
-print("autotrade start")
+#print("autotrade start")
 # 프로그램 시작 메세지 발송
 message = '\n\n[📀📀 시작 안내 📀📀]'
 message = message + '\n\n DCA_BTC 시작! '
