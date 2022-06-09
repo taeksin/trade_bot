@@ -54,14 +54,16 @@ while True:
         now = datetime.now()                                # 현재시간
         start_time = get_start_time("KRW-BTC")              # 시작시간      9:00
         #end_time = start_time + datetime.timedelta(days=1) # 종료시간      9:00 + 1일
-        buy_time = start_time - timedelta(hours=8)          # 구매시간      01:00
+        buy_time = start_time + timedelta(hours=16)          # 구매시간      01:00
         # 시간ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         #ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         # 주문 + 메시지ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         available_amt = upbit.get_krwbal()['available_krw']
         if int(available_amt)>5050:
-               # 01:00 < now < 01:05 
-            if buy_time < now < buy_time+timedelta(minutes=5):
+            # 01:00 < now < 01:05
+            now = datetime.now()
+            #print(f'buy={buy_time}\nnow={now}\nend={buy_time+timedelta(hours=3)}')
+            if buy_time < now < buy_time+timedelta(minutes=3):
                 rtn_buycoin_mp = upbit.buycoin_mp("KRW-BTC", 5000)
                 upbit.send_telegram_message("🔴🟥BTC 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-BTC")))
                 time.sleep(180)
