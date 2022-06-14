@@ -45,7 +45,7 @@ def start_monitoring():
                 time.sleep(0.3)
                 change_rate,trade_price = upbit.get_change_rate(target_item['market'])
                 float(change_rate)
-                # 개별 종목 10% 이상 상승 시 메세지 발송(1시간 간격)
+                # 개별 종목 10% 이상 상승 시 메세지 발송(3시간 간격)
                 if change_rate >= 10:
                     logging.info("PCNT-UP 조건 만족![" + str(target_item['market']) + "]")
                     logging.info("변동률: [" + str(change_rate) + "% ]")
@@ -59,10 +59,10 @@ def start_monitoring():
                     message = message + '\n- 현재가: ' + str(trade_price)
                     message = message + '\n- 변동률:  ' + str('%.2f' % float(change_rate)) + "%"
 
-                    # 메세지 발송(2시간:7200초 간격)
-                    sent_list = upbit.send_msg(sent_list, msg_key, message, '7200')
+                    # 메세지 발송(3시간:10800초 간격)
+                    sent_list = upbit.send_msg(sent_list, msg_key, message, '10800')
 
-                # 개별 종목 10% 이상 하락 시 메세지 발송(1시간 간격)
+                # 개별 종목 10% 이상 하락 시 메세지 발송(3시간 간격)
                 if change_rate <= -10:
                     logging.info("PCNT-DOWN 조건 만족![" + str(target_item['market']) + "]")
                     logging.info("변동률: [" + str(change_rate) + "% ]")
@@ -76,8 +76,8 @@ def start_monitoring():
                     message = message + '\n- 현재가: ' + str(trade_price)
                     message = message + '\n- 변동률:  ' + str('%.2f' % float(change_rate)) + "%"
 
-                    # 메세지 발송(2시간:7200초 간격)
-                    sent_list = upbit.send_msg(sent_list, msg_key, message, '7200')
+                    # 메세지 발송(3시간:10800초 간격)
+                    sent_list = upbit.send_msg(sent_list, msg_key, message, '10800')
     # ----------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
     # ----------------------------------------
