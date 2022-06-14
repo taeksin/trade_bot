@@ -66,7 +66,7 @@ while True:
             if buy_time < now < buy_time+timedelta(minutes=3):
                 rtn_buycoin_mp = upbit.buycoin_mp("KRW-BTC", 5000)
                 upbit.send_telegram_message("🔴🟥BTC 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-BTC")))
-                time.sleep(180)
+                time.sleep(240)
                 '''
                 # 알림 Key 조립
                 msg_key = {'TYPE': 'PCNT-UP','ITEM': "KRW-BTC"}
