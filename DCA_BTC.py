@@ -64,12 +64,13 @@ while True:
         if int(available_amt)>5050:
             # 01:00 < now < 01:05
             now = datetime.now()
-            print(f' buy={buy_time}\n now={now}\n end={buy_time+timedelta(minutes=5)}')
-            message = '- buy:' + str(buy_time)
-            message = message + '\n- now:' + str(now)
-            message = message + '\n- end:' + str(buy_time+timedelta(minutes=3))
-            upbit.send_telegram_message(message)
+            #print(f' buy={buy_time}\n now={now}\n end={buy_time+timedelta(minutes=5)}')
+            
             if buy_time < now < buy_time+timedelta(minutes=3):
+                message = '- buy:' + str(buy_time)
+                message = message + '\n- now:' + str(now)
+                message = message + '\n- end:' + str(buy_time+timedelta(minutes=3))
+                upbit.send_telegram_message(message)
                 rtn_buycoin_mp = upbit.buycoin_mp("KRW-BTC", 5000)
                 upbit.send_telegram_message("🔴🟥BTC 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-BTC")))
                 time.sleep(240)
