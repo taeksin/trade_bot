@@ -65,7 +65,7 @@ while True:
             now = datetime.now()
             print(f' buy={buy_time}\n now={now}\n end={end_time}')
             upbit.send_telegram_message("1번째 if까지는 okay")
-            if buy_time>now:
+            if datetime(buy_time)>datetime(now):
                 upbit.send_telegram_message("buy가now보다 크다")
             else:
                 upbit.send_telegram_message("buy가now보다 작다")
