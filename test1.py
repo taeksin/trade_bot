@@ -10,7 +10,6 @@ from decimal import Decimal
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from module import upbit
 
-
 # -----------------------------------------------------------------------------
 # - Name : start_buytrade
 # - Desc : 매수 로직
@@ -52,11 +51,10 @@ def start_buytrade(buy_amt):
             # 종목별 체크
             # -----------------------------------------------------------------
             for target_item in target_items:
-
+                # 지표 False로 초기화
                 rsi_val = False
                 mfi_val = False
                 ocl_val = False
-
                 logging.info('체크중....[' + str(target_item['market']) + ']')
 
                 # -------------------------------------------------------------
@@ -156,7 +154,7 @@ def start_buytrade(buy_amt):
                     # ------------------------------------------------------------------
                     available_amt = upbit.get_krwbal()['available_krw']
 
-                    if buy_amt == '25000':
+                    if buy_amt == '12345':
                         buy_amt = available_amt
 
                     # ------------------------------------------------------------------
@@ -178,25 +176,13 @@ def start_buytrade(buy_amt):
                     # 실제 매수 로직은 안전을 위해 주석처리 하였습니다.
                     # 실제 매매를 원하시면 테스트를 충분히 거친 후 주석을 해제하시면 됩니다.
                     # ------------------------------------------------------------------
-                    logging.info('시장가 매수 시작! [' + str(target_item['market']) + ']')
+                    #logging.info('시장가 매수 시작! [' + str(target_item['market']) + ']')
                     rtn_buycoin_mp = upbit.buycoin_mp(target_item['market'], buy_amt)
                     upbit.send_telegram_message("🔴🟥"+target_item['market']+"구매 완료🟥🔴")
                     upbit.send_telegram_message('\n- 현재가: ' + str(target_item['trade_price']))
-                    logging.info('시장가 매수 종료! [' + str(target_item['market']) + ']')
-                    logging.info(rtn_buycoin_mp)
-                    '''
-                    # 알림 Key 조립
-                    msg_key = {'TYPE': 'PCNT-UP','ITEM': target_item['market']}
+                    #logging.info('시장가 매수 종료! [' + str(target_item['market']) + ']')
+                    #logging.info(rtn_buycoin_mp)
 
-                    # 메세지 조립
-                    message = '\n\n[🔴🟥구매완료 안내!🟥🔴]'
-                    message = message + '\n\n- 종목: ' + str(target_item['market'])
-                    message = message + '\n- 현재가: ' + str(target_item['trade_price'])
-                    
-                    # 메세지 발송(1시간:3600초 간격)
-                    sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
-                    '''
-                    
     # ---------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
     # ----------------------------------------

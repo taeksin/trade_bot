@@ -1,4 +1,5 @@
 import time
+import schedule
 import pyupbit
 import datetime
 import os
