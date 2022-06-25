@@ -60,8 +60,8 @@ while True:
             end_time = buy_time + timedelta(minutes=3)           # 종료시간      01:03
             # 시간ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             
-            print(f' buy={buy_time}\n now={now}\n end={end_time}')
-            print(f' buy={buy_time.timestamp()}\n now={now.timestamp()}\n end={end_time.timestamp()}')
+            #print(f' buy={buy_time}\n now={now}\n end={end_time}')
+            #print(f' buy={buy_time.timestamp()}\n now={now.timestamp()}\n end={end_time.timestamp()}')
             
             # 01:00 < now < 01:03
             if buy_time < now < end_time or buy_time.timestamp() < now.timestamp()<end_time.timestamp() :
@@ -70,8 +70,8 @@ while True:
                 message ='- 현재시간:' + str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
                 upbit.send_telegram_message(message)
                 time.sleep(240)
-            else:
-                print("시간 조건이 안맞는다")
+            #else:
+                #print("시간 조건이 안맞는다")
             time.sleep(0.3)
         else :
             message = '\n\n  🔋🔌 ༼ つ ◕_◕ ༽つ 🔌🔋\n 🔋 총알이 떨어졌습니다. \n 🔋 장전해주세요'

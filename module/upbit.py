@@ -14,7 +14,7 @@ import telegram
 from urllib.parse import urlencode
 from decimal import Decimal
 from datetime import datetime
-
+from ast import literal_eval
 # Keys
 
 access_key = "Bfk7t6ioB45n6O50eggknUCH2AW2tPsetDEJq1m2"          # 본인 값으로 변경
@@ -2103,30 +2103,41 @@ def send_msg(sent_list, key, contents, msg_intval):
         raise
 # -----------------------------------------------------------------------------
 # - Name : read_file
-# - Desc : 파일 읽기
+# - Desc : 파일 조회
 # - Input
-# 1. name : 파일 명
+# 1. name : File Name
 # - Output
-# 1. 파일 내용
+# 1. 변수값
 # -----------------------------------------------------------------------------
 def read_file(name):
     try:
 
+        file_to_listofdict = []
+
         path = './conf/' + str(name) + '.txt'
 
-        f = open(path, 'r')
-        line = f.readline()
+        f = open(path, 'r', encoding='UTF8')
+        lines = f.read().splitlines()
         f.close()
 
-        logging.debug(line)
+        for line in lines:
+            txt_to_dict = literal_eval(line)
+            file_to_listofdict.append(txt_to_dict)
 
-        contents = line
-
-        return contents
+        return file_to_listofdict
 
     # ----------------------------------------
     # 모든 함수의 공통 부분(Exception 처리)
     # ----------------------------------------
+    except FileNotFoundError:
+        logging.info('파일이 존재하지 않습니다! 파일을 생성합니다. 파일명[' + str(name) + '.txt]')
+
+        with open(path, "w", encoding="utf-8") as f:
+            f.close()
+
+        logging.info('파일 생성 완료. 파일명[' + str(name) + '.txt]')
+        return None
+
     except Exception:
         raise
 
@@ -2156,3 +2167,79 @@ def get_change_rate(target_item):
     b=[change_rate,trade_price]
     return b
 '''
+
+# -----------------------------------------------------------------------------
+# - Name : write_config_append
+# - Desc : 파일 쓰기(추가)
+# - Input
+# 1. name : Config File Name
+# 2. req_val : 변수값
+# - Output
+# -----------------------------------------------------------------------------
+def write_config_append(name, req_val):
+    try:
+
+        # 파일명
+        file_name = './conf/' + str(name) + '.txt'
+
+        # 파일에 저장(추가하기)
+        with open(file_name, "a", encoding="utf-8") as f:
+            f.write(str(req_val))
+            f.close()
+
+    # ----------------------------------------
+    # 모든 함수의 공통 부분(Exception 처리)
+    # ----------------------------------------
+    except Exception:
+        raise
+
+# -----------------------------------------------------------------------------
+# - Name : write_config
+# - Desc : 파일 쓰기(새로쓰기)
+# - Input
+# 1. name : Config File Name
+# 2. req_val : 변수값
+# - Output
+# -----------------------------------------------------------------------------
+def write_config(name, req_val):
+    try:
+
+        # 파일명
+        file_name = './conf/' + str(name) + '.txt'
+
+        # 파일에 저장
+        with open(file_name, "w", encoding="utf-8") as f:
+            f.write(str(req_val))
+            f.close()
+
+    # ----------------------------------------
+    # 모든 함수의 공통 부분(Exception 처리)
+    # ----------------------------------------
+    except Exception:
+        raise
+# -----------------------------------------------------------------------------
+# - Name : get_env_keyvalue
+# - Desc : 환경변수 읽어오기
+# - Input
+#   1) key : key
+# - Output
+#   1) Value : 키에 대한 값
+# -----------------------------------------------------------------------------
+def get_env_keyvalue(key):
+    try:
+        path = './env/env.txt'
+
+        f = open(path, 'r', encoding='UTF8')
+        line = f.readline()
+        f.close()
+
+        env_dict = literal_eval(line)
+        logging.debug(env_dict)
+
+        return env_dict[key]
+
+    # ----------------------------------------
+    # 모든 함수의 공통 부분(Exception 처리)
+    # ----------------------------------------
+    except Exception:
+        raise
