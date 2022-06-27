@@ -64,6 +64,7 @@ while True:
             #print(f' buy={buy_time.timestamp()}\n now={now.timestamp()}\n end={end_time.timestamp()}')
             
             # 01:00 < now < 01:03
+            #서버에는 if buy_time.timestamp() < now.timestamp()<end_time.timestamp() :
             if buy_time < now < end_time or buy_time.timestamp() < now.timestamp()<end_time.timestamp() :
                 rtn_buycoin_mp = upbit.buycoin_mp("KRW-BTC", 5000)
                 upbit.send_telegram_message("🔴🟥BTC 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-BTC")))
