@@ -109,8 +109,9 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                         # 현재 수익률이 매도 수익률 이상인 경우에만 진행
                         # -----------------------------------------------------
                         if Decimal(str(rev_pcnt)) < Decimal(str(sell_pcnt)):
-                            logging.info('- 현재 수익률이 매도 수익률 보다 낮아 진행하지 않음!!!')
-                            logging.info('------------------------------------------------------')
+                            #logging.info('- 현재 수익률이 매도 수익률 보다 낮아 진행하지 않음!!!')
+                            #logging.info('------------------------------------------------------')
+                            time.sleep(1)
                             continue
 
                         # ------------------------------------------------------------------
@@ -165,7 +166,8 @@ def start_selltrade(sell_pcnt, dcnt_pcnt):
                             sent_list = upbit.send_msg(sent_list, msg_key, message, '3600')
 
                         else:
-                            logging.info('- 고점 대비 하락률 조건에 맞지 않아 매도하지 않음!!!')
+                            #logging.info('- 고점 대비 하락률 조건에 맞지 않아 매도하지 않음!!!')
+                            time.sleep(1)
                             #logging.info('------------------------------------------------------')
 
     # ---------------------------------------
@@ -208,11 +210,11 @@ if __name__ == '__main__':
         dcnt_pcnt = -5
         upbit.set_loglevel(log_level)
 
-        logging.info("*********************************************************")
-        logging.info("1. 로그레벨 : " + str(log_level))
-        logging.info("2. 매도 수익률 : " + str(sell_pcnt))
-        logging.info("3. 고점대비 하락률 : " + str(dcnt_pcnt))
-        logging.info("*********************************************************")
+        # logging.info("*********************************************************")
+        # logging.info("1. 로그레벨 : " + str(log_level))
+        # logging.info("2. 매도 수익률 : " + str(sell_pcnt))
+        # logging.info("3. 고점대비 하락률 : " + str(dcnt_pcnt))
+        # logging.info("*********************************************************")
 
         # 매도 로직 시작
         start_selltrade(sell_pcnt, dcnt_pcnt)
