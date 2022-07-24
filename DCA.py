@@ -16,7 +16,7 @@ def get_start_time(ticker):
     """시작 시간 조회"""
     df = pyupbit.get_ohlcv(ticker, interval="day", count=1)  # 업비트에서  ohclv를 일봉으로 조회하면 시작 시간이 나옴
     start_time = df.index[0]
-    return 
+    return start_time
 
 def get_balance(ticker):
     """잔고 조회"""
@@ -65,17 +65,17 @@ while True:
             
             # 01:00 < now < 01:03
             #서버에는 if buy_time.timestamp() < now.timestamp()<end_time.timestamp() :
-            if buy_time.timestamp() < now.timestamp() < end_time.timestamp() :
+            if buy_time.timestamp() < now.timestamp()<end_time.timestamp() :
                 rtn_buycoin_mp = upbit.buycoin_mp("KRW-BTC", 10000)
                 message ='- 현재시간:' + str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-                upbit.send_telegram_message("🔴🟥BTC 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-BTC"))+"\n "+message)
-                message ='- 현재시간:' + str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                upbit.send_telegram_message("🔴🟥BTC 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-BTC"))+"\n" + message)
                 rtn_buycoin_mp = upbit.buycoin_mp("KRW-ETH", 5000)
-                upbit.send_telegram_message("🔴🟥ETH 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-ETH"))+"\n "+message)
+                message ='- 현재시간:' + str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                upbit.send_telegram_message("🔴🟥BTC 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-ETH"))+"\n" + message)
                 time.sleep(86000)
-            #else:
+            else:
                 #print("시간 조건이 안맞는다")
-            time.sleep(0.3)
+                time.sleep(0.3)
         else :
             message = '\n\n  🔋🔌 ༼ つ ◕_◕ ༽つ 🔌🔋\n 🔋 총알이 떨어졌습니다. \n 🔋 장전해주세요'
             message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
