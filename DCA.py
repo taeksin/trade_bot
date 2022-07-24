@@ -38,7 +38,7 @@ def get_current_price(ticker):
 #print("autotrade start")
 # 프로그램 시작 메세지 발송
 message = '\n\n[📀📀 시작 안내 📀📀]'
-message = message + '\n\n DCA_BTC 시작! '
+message = message + '\n\n DCA 시작! '
 message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
 
 # 프로그램 시작 메세지 발송
@@ -52,7 +52,7 @@ while True:
         #ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         # 주문 + 메시지ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
         available_amt = upbit.get_krwbal()['available_krw']
-        if int(available_amt)>10050:
+        if int(available_amt)>15075:
             # 시간ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
             now = datetime.now()                                 # 현재시간
             start_time = get_start_time("KRW-BTC")               # 시작시간      9:00
@@ -65,12 +65,14 @@ while True:
             
             # 01:00 < now < 01:03
             #서버에는 if buy_time.timestamp() < now.timestamp()<end_time.timestamp() :
-            if buy_time < now < end_time or buy_time.timestamp() < now.timestamp()<end_time.timestamp() :
+            if buy_time.timestamp() < now.timestamp() < end_time.timestamp() :
                 rtn_buycoin_mp = upbit.buycoin_mp("KRW-BTC", 10000)
-                upbit.send_telegram_message("🔴🟥BTC 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-BTC")))
                 message ='- 현재시간:' + str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-                upbit.send_telegram_message(message)
-                time.sleep(240)
+                upbit.send_telegram_message("🔴🟥BTC 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-BTC"))+"\n "+message)
+                message ='- 현재시간:' + str(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                rtn_buycoin_mp = upbit.buycoin_mp("KRW-ETH", 5000)
+                upbit.send_telegram_message("🔴🟥ETH 구매 완료🟥🔴"+"\n - 현재가 "+ str(get_current_price("KRW-ETH"))+"\n "+message)
+                time.sleep(86000)
             #else:
                 #print("시간 조건이 안맞는다")
             time.sleep(0.3)
@@ -85,7 +87,7 @@ while True:
     except KeyboardInterrupt:
         # 프로그램 종료 메세지 조립
         message = '\n\n[🚨❌🚨종료🚨❌🚨]'
-        message = message + '\n\n DCA_BTC 종료!'
+        message = message + '\n\n DCA 종료!'
         message = message + '\n\n KeyboardInterrupt Exception 발생!'
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
         
@@ -98,7 +100,7 @@ while True:
     except Exception:
         # 프로그램 종료 메세지 조립
         message = '\n\n[🚨❌🚨종료🚨❌🚨]'
-        message = message + '\n\n DCA_BTC 종료!'
+        message = message + '\n\n DCA 종료!'
         message = message + '\n\n Exception 발생!'
         message = message + '\n\n- 현재시간:' + str(datetime.today().strftime('%Y-%m-%d %H:%M:%S'))
         
